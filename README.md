@@ -1,3 +1,14 @@
+<div>
+    <h5>Product Management</h5>
+    <p>After cloning the project, follow these steps:</p>
+    <ul>
+        <li>Go to the project folder in the terminal.</li>
+        <li>Run the following command in the terminal inside the project folder: <code>composer install</code> or <code>composer i</code>.</li>
+        <li>Run the command: <code>php artisan project:setup</code>.</li>
+    </ul>
+</div>
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
