@@ -6,6 +6,11 @@
         <li>Run the following command in the terminal inside the project folder: <code>composer install</code> or <code>composer i</code>.</li>
         <li>Run the command: <code>php artisan project:setup</code>.</li>
     </ul>
+    <p>
+        admin email: <code>admin@mail.com</code>
+        <br>
+        admin password <code>admin123</code>
+    </p>
 </div>
 
 

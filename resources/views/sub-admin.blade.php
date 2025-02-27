@@ -68,23 +68,23 @@
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control bg-dark text-white" id="name" name="name">
+                        <input type="text" class="form-control bg-dark text-white" id="name" name="name" autocomplete="off">
                         <div class="invalid-feedback" id="nameError"></div>
                     </div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control bg-dark text-white" id="email" name="email">
+                        <input type="email" class="form-control bg-dark text-white" id="email" name="email" autocomplete="off">
                         <div class="invalid-feedback" id="emailError"></div>
                     </div>
 
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control bg-dark text-white" id="password" name="password">
+                        <input type="password" class="form-control bg-dark text-white" id="password" name="password" autocomplete="off">
                         <div class="invalid-feedback" id="passwordError"></div>
                     </div>
 
-                    <button type="submit" class="btn btn-success">Add User</button>
+                    <button type="submit" class="btn btn-success" id="add-user-btn">Add User</button>
                 </form>
             </div>
         </div>
@@ -101,6 +101,7 @@
             $('.invalid-feedback').text('').hide();
             $('#errorAlert').text('').addClass('d-none');
             $('#successMessage').text('').addClass('d-none')
+            $('#add-user-btn').addClass('d-none');
 
             $.ajax({
                 url: "{{ route('sub-admin.add') }}",
@@ -116,7 +117,9 @@
                     }, 2000);
                 },
                 error: function (xhr) {
+                    $('#add-user-btn').removeClass('d-none');
                     let errors = xhr.responseJSON.errors;
+
                     if (errors) {
                         if (errors.name) $('#nameError').text(errors.name[0]).show();
                         if (errors.email) $('#emailError').text(errors.email[0]).show();

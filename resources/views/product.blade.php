@@ -150,20 +150,20 @@
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" id="name" name="name" class="form-control bg-dark text-white">
+                        <input type="text" id="name" name="name" class="form-control bg-dark text-white" autocomplete="off">
                         <div class="invalid-feedback" id="nameError"></div>
                     </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">Quantity</label>
-                        <input type="number" id="quantity" name="quantity" class="form-control bg-dark text-white">
+                        <input type="number" id="quantity" name="quantity" class="form-control bg-dark text-white" autocomplete="off">
                         <div class="invalid-feedback" id="quantityError"></div>
                     </div>
                     <div class="mb-3">
                         <label for="images" class="form-label">Images</label>
-                        <input type="file" id="images" name="images[]" class="form-control bg-dark text-white" multiple>
+                        <input type="file" id="images" name="images[]" class="form-control bg-dark text-white" autocomplete="off" multiple>
                         <div class="invalid-feedback" id="imagesError"></div>
                     </div>
-                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="submit" class="btn btn-success" id="upload-btn">Save</button>
                 </form>
 
                 <form id="productBulkAddForm" class="d-none">
@@ -174,10 +174,10 @@
                     </div>
                     <div class="mb-3">
                         <label for="bulkFile" class="form-label">Upload CSV/Excel File</label>
-                        <input type="file" id="bulkFile" name="file" class="form-control bg-dark text-white">
+                        <input type="file" id="bulkFile" name="file" class="form-control bg-dark text-white" autocomplete="off">
                         <div class="invalid-feedback" id="bulkFileError"></div>
                     </div>
-                    <button type="submit" class="btn btn-success">Upload</button>
+                    <button type="submit" class="btn btn-success" id="bulk-upload-btn">Upload</button>
                 </form>
             </div>
         </div>
@@ -217,7 +217,7 @@
                 </form>
 
                 <div id="existingImages" class="me-3 row pt-3">
-                    <!-- Existing images will be loaded here -->
+                    <!-- images -->
                 </div>
             </div>
         </div>
@@ -239,46 +239,14 @@
             }
         });
 
-        $('#productAddForm').on('submit', function (e) {
-            e.preventDefault();
-            let formData = new FormData(this);
-            $('.invalid-feedback').text('').hide();
-            $('#errorAlert').text('').addClass('d-none');
-            $('#successMessage').text('').addClass('d-none');
-
-            $.ajax({
-                url: "{{ route('product.add') }}",
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    console.log(response);
-                    $('#successMessage').text(response['success']).removeClass('d-none');
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
-                },
-                error: function (xhr) {
-                    let errors = xhr.responseJSON.errors;
-                    
-                    if (errors) {
-                        if (errors.file) $('#bulkFile').text(errors.file[0]).show();
-                    }
-                    
-                    if (xhr.responseJSON.error) {
-                        $('#errorAlert').text(xhr.responseJSON.error).removeClass('d-none');
-                    }
-                }
-            });
-        });
-
         $('#productBulkAddForm').on('submit', function (e) {
             e.preventDefault();
             let formData = new FormData(this);
             $('.invalid-feedback').text('').hide();
             $('#errorAlert').text('').addClass('d-none');
             $('#successMessage').text('').addClass('d-none');
+
+            $('#bulk-upload-btn').addClass('d-none');
 
             $.ajax({
                 url: "{{ route('product.bulk.add') }}",
@@ -294,6 +262,46 @@
                     }, 2000);
                 },
                 error: function (xhr) {
+                    $('#bulk-upload-btn').removeClass('d-none');
+
+                    let errors = xhr.responseJSON.errors;
+                    
+                    if (errors) {
+                        if (errors.file) $('#bulkFileError').text(errors.file[0]).show();
+                    }
+                    
+                    if (xhr.responseJSON.error) {
+                        $('#errorAlert').text(xhr.responseJSON.error).removeClass('d-none');
+                    }
+                }
+            });
+        });
+
+        $('#productAddForm').on('submit', function (e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            $('.invalid-feedback').text('').hide();
+            $('#errorAlert').text('').addClass('d-none');
+            $('#successMessage').text('').addClass('d-none');
+
+            $('#upload-btn').addClass('d-none');
+
+            $.ajax({
+                url: "{{ route('product.add') }}",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response);
+                    $('#successMessage').text(response['success']).removeClass('d-none');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                },
+                error: function (xhr) {
+                    $('#upload-btn').removeClass('d-none');
+
                     let errors = xhr.responseJSON.errors;
                     
                     if (errors) {
